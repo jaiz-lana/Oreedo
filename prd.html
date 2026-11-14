@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Buat PRD — Oreedo</title>
+  <meta name="description" content="Susun PRD.md dan TASKS.md lengkap dari jawaban singkat. Siap tempel ke AI apa pun.">
+  <meta name="theme-color" content="#16a34a">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Lewati ke konten</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 22V11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 12c0-4.42 3.58-8 8-8 0 4.42-3.58 8-8 8Z" fill="currentColor"/>
+          <path d="M12 14.5c0-3.31-2.69-6-6-6 0 3.31 2.69 6 6 6Z" fill="currentColor" opacity=".55"/>
+        </svg>
+        <span class="brand-name">Oreedo<span class="brand-dot">.</span></span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Buka menu">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Navigasi utama">
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="prompt.html">Buat Prompt</a></li>
+          <li><a href="prd.html" aria-current="page">Buat PRD</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="page-head">
+      <div class="container">
+        <span class="eyebrow">Buat PRD</span>
+        <h1>Dokumen dan rencana kerja, dalam satu alur.</h1>
+        <p class="lead">
+          Delapan langkah singkat untuk menghasilkan <strong>PRD.md</strong> dan
+          <strong>TASKS.md</strong>. Dua berkas yang siap diserahkan ke AI, lengkap dengan
+          aturan kerja bertahap. Draf tersimpan otomatis di browser.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container">
+
+        <div class="toolbar mb-2">
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-example">Isi contoh</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">Mulai ulang</button>
+        </div>
+
+        <div class="wizard" id="prd-wizard">
+
+          <div class="wizard-progress" aria-live="polite">
+            <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+            <div class="progress-meta">
+              <span id="progress-label">Langkah 1 dari 8</span>
+              <span id="progress-step">Ide &amp; tujuan</span>
+            </div>
+          </div>
+
+          <!-- ============ PANEL 1 ============ -->
+          <section class="step-panel is-active" id="panel-1" aria-labelledby="panel-1-title">
+            <h2 class="step-title" id="panel-1-title">Ide &amp; tujuan</h2>
+            <p class="step-desc">Pilih jenis proyek, lalu tuangkan ide besarnya dalam beberapa kalimat.</p>
+
+            <div class="form-grid">
+              <fieldset class="field" style="border:0;padding:0;margin:0;min-width:0;">
+                <legend class="field-label mb-1">Jenis proyek <span class="req" aria-hidden="true">*</span></legend>
+                <div class="chip-grid">
+                  <label class="chip">
+                    <input type="radio" name="projectType" value="website" checked>
+                    <span class="chip-face">Website</span>
+                  </label>
+                  <label class="chip">
+                    <input type="radio" name="projectType" value="reels">
+                    <span class="chip-face">Reels / Video</span>
+                  </label>
+                  <label class="chip">
+                    <input type="radio" name="projectType" value="deck">
+                    <span class="chip-face">Deck</span>
+                  </label>
+                  <label class="chip">
+                    <input type="radio" name="projectType" value="app">
+                    <span class="chip-face">Aplikasi Kecil</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <div class="field">
+                <label for="field-nama">Nama proyek</label>
+                <input class="input" id="field-nama" type="text" data-field="namaProyek" placeholder="Nama singkat yang mudah diingat.">
+              </div>
+
+              <div class="field">
+                <label for="field-ide">Ide <span class="req" aria-hidden="true">*</span></label>
+                <textarea class="textarea" id="field-ide" data-field="ide" aria-required="true" placeholder="Apa yang ingin kamu buat? Jelaskan singkat, dua sampai empat kalimat."></textarea>
+              </div>
+
+              <div class="field">
+                <label for="field-tujuan">Tujuan <span class="req" aria-hidden="true">*</span></label>
+                <textarea class="textarea" id="field-tujuan" data-field="tujuan" aria-required="true" placeholder="Hasil seperti apa yang membuat proyek ini dianggap berhasil?"></textarea>
+              </div>
+            </div>
+
+            <div class="wizard-nav">
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-primary" data-next>
+                Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- ============ PANEL 2 ============ -->
+          <section class="step-panel" id="panel-2" aria-labelledby="panel-2-title">
+            <h2 class="step-title" id="panel-2-title">Pengguna &amp; masalah</h2>
+            <p class="step-desc">Siapa yang memakai, dan masalah apa yang ingin diselesaikan?</p>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="field-pengguna">Pengguna <span class="req" aria-hidden="true">*</span></label>
+                <textarea class="textarea" id="field-pengguna" data-field="pengguna" aria-required="true" placeholder="Siapa mereka? Level teknisnya bagaimana? Konteks pemakaiannya kapan dan di mana?"></textarea>
+              </div>
+
+              <div class="field">
+                <label for="field-masalah">Masalah <span class="req" aria-hidden="true">*</span></label>
+                <textarea class="textarea" id="field-masalah" data-field="masalah" aria-required="true" placeholder="Masalah apa yang sekarang mereka alami? Apa yang bikin repot?"></textarea>
+              </div>
+            </div>
+
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-primary" data-next>
+                Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- ============ PANEL 3 ============ -->
+          <section class="step-panel" id="panel-3" aria-labelledby="panel-3-title">
+            <h2 class="step-title" id="panel-3-title">Kebutuhan</h2>
+            <p class="step-desc">Tulis satu kebutuhan per baris. Oreedo akan menomori otomatis.</p>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="field-kebutuhan">Daftar kebutuhan <span class="req" aria-hidden="true">*</span></label>
+                <textarea class="textarea textarea-tall" id="field-kebutuhan" data-field="kebutuhan" aria-required="true" placeholder="Contoh:&#10;Pengguna bisa membuat akun dengan email&#10;Pengguna bisa menyimpan draf&#10;Pengguna bisa mengekspor berkas"></textarea>
+                <div class="hint">
+                  Pratinjau bernomor:
+                  <ol id="kebutuhan-preview" style="margin:.4rem 0 0;padding-left:1.4em;"></ol>
+                </div>
+              </div>
+            </div>
+
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-primary" data-next>
+                Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- ============ PANEL 4 ============ -->
+          <section class="step-panel" id="panel-4" aria-labelledby="panel-4-title">
+            <h2 class="step-title" id="panel-4-title">Halaman &amp; alur</h2>
+            <p class="step-desc">Bagaimana pengguna berpindah dari satu bagian ke bagian lain?</p>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="field-halaman"><span data-label="halaman">Halaman / Alur</span></label>
+                <textarea class="textarea textarea-tall" id="field-halaman" data-field="halaman" placeholder="Contoh:&#10;Beranda → Daftar → Detail&#10;Tentang&#10;Kontak"></textarea>
+                <p class="hint">Satu alur atau halaman per baris. Boleh berupa panah.</p>
+              </div>
+            </div>
+
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-primary" data-next>
+                Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- ============ PANEL 5 ============ -->
+          <section class="step-panel" id="panel-5" aria-labelledby="panel-5-title">
+            <h2 class="step-title" id="panel-5-title">Desain &amp; gaya</h2>
+            <p class="step-desc">Nuansa visual, warna, tipografi, dan hal-hal yang bikin hasilnya terasa "kamu".</p>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="field-desain">Desain &amp; gaya</label>
+                <textarea class="textarea textarea-tall" id="field-desain" data-field="desain" placeholder="Contoh:&#10;Palet hijau-putih, sudut membulat besar&#10;Font Plus Jakarta Sans&#10;Nuansa hangat, tidak kaku"></textarea>
+              </div>
+            </div>
+
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-primary" data-next>
+                Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- ============ PANEL 6 ============ -->
+          <section class="step-panel" id="panel-6" aria-labelledby="panel-6-title">
+            <h2 class="step-title" id="panel-6-title">Teknologi &amp; batasan</h2>
+            <p class="step-desc">Alat, bahasa, atau platform yang wajib (atau tidak boleh) dipakai.</p>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="field-teknologi">Teknologi &amp; batasan</label>
+                <textarea class="textarea textarea-tall" id="field-teknologi" data-field="teknologi" placeholder="Contoh:&#10;HTML, CSS, JS murni, tanpa framework&#10;Tanpa backend&#10;Harus jalan di GitHub Pages"></textarea>
+              </div>
+            </div>
+
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-primary" data-next>
+                Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- ============ PANEL 7 ============ -->
+          <section class="step-panel" id="panel-7" aria-labelledby="panel-7-title">
+            <h2 class="step-title" id="panel-7-title">Larangan</h2>
+            <p class="step-desc">Hal-hal yang tidak boleh muncul atau tidak boleh dilakukan.</p>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="field-larangan">Daftar larangan</label>
+                <textarea class="textarea textarea-tall" id="field-larangan" data-field="larangan" placeholder="Satu per baris. Contoh:&#10;Jangan mengarang statistik&#10;Jangan memakai framework&#10;Jangan mengubah file tahap sebelumnya"></textarea>
+                <p class="hint">Satu larangan per baris.</p>
+              </div>
+            </div>
+
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-primary" data-next>
+                Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- ============ PANEL 8 ============ -->
+          <section class="step-panel" id="panel-8" aria-labelledby="panel-8-title">
+            <h2 class="step-title" id="panel-8-title">Kriteria selesai &amp; hasil</h2>
+            <p class="step-desc">Gunakan pola "Ketika …, maka …". Setelah itu, berkas hasilnya muncul di bawah.</p>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="field-kriteria">Kriteria selesai <span class="req" aria-hidden="true">*</span></label>
+                <textarea class="textarea textarea-tall" id="field-kriteria" data-field="kriteria" aria-required="true" placeholder="Ketika …, maka …&#10;Ketika …, maka …"></textarea>
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="tabs" role="tablist" aria-label="Berkas keluaran">
+              <button type="button" class="tab" id="tab-prd" role="tab" aria-selected="true" aria-controls="panel-prd" data-tab="prd">PRD.md</button>
+              <button type="button" class="tab" id="tab-tasks" role="tab" aria-selected="false" aria-controls="panel-tasks" data-tab="tasks">TASKS.md</button>
+            </div>
+
+            <div class="tab-panel is-active" id="panel-prd" role="tabpanel" aria-labelledby="tab-prd">
+              <div class="output mb-2">
+                <div class="output-head">
+                  <p class="output-title">PRD.md</p>
+                  <span class="badge" id="prd-badge">0 isian kosong</span>
+                </div>
+                <pre id="prd-output" tabindex="0"></pre>
+              </div>
+              <div class="btn-group mb-2">
+                <button type="button" class="btn btn-primary btn-sm" id="btn-copy-prd">Salin berkas ini</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-download-prd">Unduh .md</button>
+              </div>
+            </div>
+
+            <div class="tab-panel" id="panel-tasks" role="tabpanel" aria-labelledby="tab-tasks">
+              <div class="output mb-2">
+                <div class="output-head">
+                  <p class="output-title">TASKS.md</p>
+                  <span class="badge" id="tasks-badge">4 tahap</span>
+                </div>
+                <pre id="tasks-output" tabindex="0"></pre>
+              </div>
+              <div class="btn-group mb-2">
+                <button type="button" class="btn btn-primary btn-sm" id="btn-copy-tasks">Salin berkas ini</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-download-tasks">Unduh .md</button>
+              </div>
+            </div>
+
+            <div class="notice notice-info mb-2">
+              <span class="notice-icon" aria-hidden="true">📋</span>
+              <p>
+                Bagian <code>[ISI: …]</code> perlu kamu lengkapi. Aturan kerja bertahap sudah
+                tertulis di TASKS.md, jadi AI tidak akan melompati tahap.
+              </p>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" id="btn-copy-all">
+                Salin semua + perintah AI
+                <span class="btn-arrow" aria-hidden="true">→</span>
+              </button>
+              <button type="button" class="btn btn-ghost" data-prev>← Kembali</button>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-brand">
+        <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 22V11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 12c0-4.42 3.58-8 8-8 0 4.42-3.58 8-8 8Z" fill="currentColor"/>
+          <path d="M12 14.5c0-3.31-2.69-6-6-6 0 3.31 2.69 6 6 6Z" fill="currentColor" opacity=".55"/>
+        </svg>
+        Oreedo
+      </span>
+
+      <ul class="footer-links">
+        <li><a href="lisensi.html">Lisensi</a></li>
+        <li><a href="kontak.html">Kontak</a></li>
+        <li><a href="bug.html">Laporan Bug</a></li>
+      </ul>
+
+      <p class="footer-meta">
+        &copy; <span data-year>2025</span> Oreedo. Dibuat dengan sabar dan sedikit tanah.
+      </p>
+    </div>
+  </footer>
+
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/prd.js" defer></script>
+</body>
+</html>
