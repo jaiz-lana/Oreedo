@@ -3,11 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <script>try{var t=localStorage.getItem('oreedo:theme');if(t==='light'||t==='dark'){document.querySelector('meta[name="color-scheme"]').content=t;}}catch(e){}</script>
   <title>Laporan Bug — Oreedo</title>
-  <meta name="description" content="Laporkan bug di Oreedo lewat GitHub Issue atau email. Tanpa form yang butuh server.">
-  <meta name="theme-color" content="#16a34a">
-  <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+  <meta name="description" content="Laporkan bug di Oreedo lewat GitHub Issue, salinan Markdown, atau email. Tanpa form yang butuh server.">
+  <meta name="theme-color" content="#16a34a" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c1610" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="Laporan Bug — Oreedo">
+  <meta property="og:description" content="Laporkan masalah di Oreedo lewat GitHub Issue, Markdown, atau email langsung dari browser.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/img/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="assets/img/og-image.png">
 
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -28,19 +39,37 @@
         <span class="brand-name">Oreedo<span class="brand-dot">.</span></span>
       </a>
 
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Buka menu">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
-          <path d="M4 7h16M4 12h16M4 17h16"/>
-        </svg>
-      </button>
+      <div class="header-actions">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Buka menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"/>
+          </svg>
+        </button>
 
-      <nav class="site-nav" id="site-nav" aria-label="Navigasi utama">
-        <ul>
-          <li><a href="index.html">Beranda</a></li>
-          <li><a href="prompt.html">Buat Prompt</a></li>
-          <li><a href="prd.html">Buat PRD</a></li>
-        </ul>
-      </nav>
+        <nav class="site-nav" id="site-nav" aria-label="Navigasi utama">
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="prompt.html">Buat Prompt</a></li>
+            <li><a href="prd.html">Buat PRD</a></li>
+          </ul>
+        </nav>
+
+        <button class="theme-toggle" type="button" id="theme-toggle">
+          <span class="theme-opt theme-opt-dark">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span class="visually-hidden">Ganti ke mode gelap</span>
+          </span>
+          <span class="theme-opt theme-opt-light">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+            <span class="visually-hidden">Ganti ke mode terang</span>
+          </span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -51,9 +80,9 @@
         <span class="eyebrow">Laporan Bug</span>
         <h1>Ada yang rusak? Ceritakan.</h1>
         <p class="lead">
-          Isi form singkat di bawah. Oreedo akan menyusun laporan yang rapi, lalu
-          membawamu ke GitHub Issue atau email dengan isi yang sudah terisi. Tidak ada
-          data yang dikirim ke server mana pun.
+          Isi form singkat di bawah. Oreedo akan menyusun laporan yang rapi untuk
+          GitHub Issue, salinan Markdown, atau email. Tidak ada data yang dikirim ke
+          server mana pun.
         </p>
       </div>
     </section>
@@ -62,17 +91,23 @@
       <div class="container">
 
         <div class="card">
+          <p class="form-note">Kolom bertanda <span class="req" aria-hidden="true">*</span> wajib diisi.</p>
+
           <form id="bug-form" class="form-grid" novalidate>
 
             <div class="field">
               <label for="bug-judul">Judul laporan <span class="req" aria-hidden="true">*</span></label>
-              <input class="input" id="bug-judul" name="judul" type="text" aria-required="true"
+              <input class="input" id="bug-judul" name="judul" type="text" required data-error="err-judul"
                      placeholder="Ringkas dalam satu kalimat. Contoh: Tombol Salin tidak berfungsi di Safari.">
+              <p class="field-error" id="err-judul">
+                <span role="img" aria-label="Error">❌</span>
+                <span>Tulis ringkasan judul laporan terlebih dahulu.</span>
+              </p>
             </div>
 
             <div class="field">
               <label for="bug-halaman">Halaman bermasalah <span class="req" aria-hidden="true">*</span></label>
-              <select class="select" id="bug-halaman" name="halaman" aria-required="true">
+              <select class="select" id="bug-halaman" name="halaman" required data-error="err-halaman">
                 <option value="">— Pilih halaman —</option>
                 <option value="index.html">Beranda</option>
                 <option value="prompt.html">Buat Prompt</option>
@@ -83,39 +118,56 @@
                 <option value="404.html">Halaman 404</option>
                 <option value="lainnya">Lainnya</option>
               </select>
+              <p class="field-error" id="err-halaman">
+                <span role="img" aria-label="Error">❌</span>
+                <span>Pilih halaman tempat bug ditemukan.</span>
+              </p>
             </div>
 
             <div class="field">
               <label for="bug-langkah">Langkah mengulang <span class="req" aria-hidden="true">*</span></label>
-              <textarea class="textarea" id="bug-langkah" name="langkah" aria-required="true"
+              <textarea class="textarea" id="bug-langkah" name="langkah" required data-error="err-langkah"
                         placeholder="Contoh:&#10;1. Buka halaman Buat Prompt&#10;2. Isi form seadanya&#10;3. Klik Salin"></textarea>
+              <p class="field-error" id="err-langkah">
+                <span role="img" aria-label="Error">❌</span>
+                <span>Jelaskan langkah untuk mengulang masalah ini.</span>
+              </p>
             </div>
 
             <div class="field">
               <label for="bug-harapan">Yang diharapkan <span class="req" aria-hidden="true">*</span></label>
-              <textarea class="textarea" id="bug-harapan" name="harapan" aria-required="true"
+              <textarea class="textarea" id="bug-harapan" name="harapan" required data-error="err-harapan"
                         placeholder="Apa yang seharusnya terjadi?"></textarea>
+              <p class="field-error" id="err-harapan">
+                <span role="img" aria-label="Error">❌</span>
+                <span>Jelaskan hasil yang seharusnya terjadi.</span>
+              </p>
             </div>
 
             <div class="field">
               <label for="bug-kenyataan">Yang terjadi <span class="req" aria-hidden="true">*</span></label>
-              <textarea class="textarea" id="bug-kenyataan" name="kenyataan" aria-required="true"
+              <textarea class="textarea" id="bug-kenyataan" name="kenyataan" required data-error="err-kenyataan"
                         placeholder="Apa yang benar-benar terjadi? Sertakan pesan error jika ada."></textarea>
+              <p class="field-error" id="err-kenyataan">
+                <span role="img" aria-label="Error">❌</span>
+                <span>Jelaskan apa yang benar-benar terjadi.</span>
+              </p>
             </div>
 
             <div class="field">
               <label for="bug-browser">Browser &amp; perangkat</label>
-              <input class="input" id="bug-browser" name="browser" type="text"
-                     placeholder="Terisi otomatis dari navigator.userAgent.">
-              <p class="hint">Kamu bisa mengubahnya jika perlu.</p>
+              <p class="hint" id="hint-browser">Terisi otomatis dari <code>navigator.userAgent</code>. Kamu bisa mengubahnya jika perlu.</p>
+              <input class="input" id="bug-browser" name="browser" type="text" aria-describedby="hint-browser"
+                     placeholder="Contoh: Chrome 135 di Android 14 / macOS Safari.">
             </div>
 
-            <p class="field-error hidden" id="bug-error" role="alert"></p>
-
             <div class="btn-group">
-              <button type="button" class="btn btn-primary" id="btn-issue">
+              <button type="submit" class="btn btn-primary" id="btn-issue">
                 Laporkan lewat GitHub Issue
                 <span class="btn-arrow" aria-hidden="true">→</span>
+              </button>
+              <button type="button" class="btn btn-secondary" id="btn-copy-report">
+                Salin laporan (Markdown)
               </button>
               <button type="button" class="btn btn-secondary" id="btn-email">
                 Kirim lewat email
@@ -127,8 +179,8 @@
         <div class="notice notice-info mt-2">
           <span class="notice-icon" aria-hidden="true">🔒</span>
           <p>
-            Laporan hanya dibuka di tab baru. Oreedo tidak menyimpan isi form ini ke
-            mana pun selain di browser kamu sendiri.
+            Laporan hanya disalin ke clipboard atau dibuka di tab baru. Oreedo tidak
+            menyimpan maupun mengirim isi form ini ke server mana pun.
           </p>
         </div>
 
@@ -152,10 +204,12 @@
         <li><a href="lisensi.html">Lisensi</a></li>
         <li><a href="kontak.html">Kontak</a></li>
         <li><a href="bug.html">Laporan Bug</a></li>
+        <li><button type="button" class="btn btn-secondary btn-xs" id="btn-install" hidden>Pasang aplikasi</button></li>
       </ul>
+      <span class="visually-hidden" id="install-status" role="status"></span>
 
       <p class="footer-meta">
-        &copy; <span data-year>2025</span> Oreedo. Dibuat dengan sabar dan sedikit tanah.
+        &copy; <span data-year>2026</span> Oreedo. Dibuat dengan sabar dan sedikit tanah.
       </p>
     </div>
   </footer>
@@ -165,159 +219,153 @@
     (function () {
       'use strict';
 
-      var $ = Oreedo.$;
-      var $$ = Oreedo.$$;
-
-      var GITHUB_USER = 'https://github.com/jaiz-lana';
-      var GITHUB_REPO = 'https://github.com/jaiz-lana/Oreedo/';
+      var GITHUB_USER = 'jaiz-lana';
+      var GITHUB_REPO = 'Oreedo';
       var EMAIL = 'seputarteknologi102@gmail.com';
+      var MAX_ISSUE_URL_LEN = 7000;
 
-      /* ---------- Prefill browser dari userAgent ---------- */
-      function initBrowser() {
-        var el = $('#bug-browser');
-        if (!el) return;
-        try {
-          var ua = navigator.userAgent || '';
-          if (ua) el.value = ua;
-        } catch (err) { /* diabaikan */ }
-      }
+      function startBugPage() {
+        var Oreedo = window.Oreedo;
+        var $ = Oreedo.$;
 
-      /* ---------- Validasi ---------- */
-      function validate() {
-        var required = ['bug-judul', 'bug-halaman', 'bug-langkah', 'bug-harapan', 'bug-kenyataan'];
-        var labels = {
-          'bug-judul': 'Judul laporan',
-          'bug-halaman': 'Halaman bermasalah',
-          'bug-langkah': 'Langkah mengulang',
-          'bug-harapan': 'Yang diharapkan',
-          'bug-kenyataan': 'Yang terjadi'
-        };
-
-        $$('.field').forEach(function (f) { f.classList.remove('has-error'); });
-        $$('.field-error.hidden').forEach(function (e) { e.textContent = ''; });
-
-        var missing = [];
-        required.forEach(function (id) {
-          var el = document.getElementById(id);
+        function initBrowser() {
+          var el = $('#bug-browser');
           if (!el) return;
-          var val = String(el.value || '').trim();
-          if (val === '') {
-            missing.push(labels[id]);
-            var field = el.closest ? el.closest('.field') : null;
-            if (field) field.classList.add('has-error');
+          try {
+            var ua = navigator.userAgent || '';
+            if (ua) el.value = ua;
+          } catch (err) { /* diabaikan */ }
+        }
+
+        function validateForm() {
+          var form = $('#bug-form');
+          return Oreedo.validation.checkAndFocusFirstInvalid(form);
+        }
+
+        function getData() {
+          function val(id) {
+            var el = document.getElementById(id);
+            return el ? String(el.value || '').trim() : '';
           }
-        });
+          return {
+            judul: val('bug-judul'),
+            halaman: val('bug-halaman'),
+            langkah: val('bug-langkah'),
+            harapan: val('bug-harapan'),
+            kenyataan: val('bug-kenyataan'),
+            browser: val('bug-browser')
+          };
+        }
 
-        var errBox = $('#bug-error');
-        if (missing.length > 0) {
-          if (errBox) {
-            errBox.classList.remove('hidden');
-            errBox.textContent = 'Masih ada yang kosong: ' + missing.join(', ') + '.';
+        function buildBody(d) {
+          var lines = [];
+          lines.push('### Halaman');
+          lines.push(d.halaman || '[tidak diisi]');
+          lines.push('');
+          lines.push('### Langkah mengulang');
+          lines.push(d.langkah);
+          lines.push('');
+          lines.push('### Yang diharapkan');
+          lines.push(d.harapan);
+          lines.push('');
+          lines.push('### Yang terjadi');
+          lines.push(d.kenyataan);
+          lines.push('');
+          lines.push('### Browser & perangkat');
+          lines.push(d.browser || '[tidak diisi]');
+          lines.push('');
+          lines.push('---');
+          lines.push('Dilaporkan lewat Oreedo.');
+          return lines.join('\n');
+        }
+
+        function buildMarkdownReport(d) {
+          return '# [Bug] ' + d.judul + '\n\n' + buildBody(d);
+        }
+
+        function buildIssueUrl(d) {
+          var title = '[Bug] ' + d.judul;
+          var body = buildBody(d);
+          var base = 'https://github.com/' + GITHUB_USER + '/' + GITHUB_REPO + '/issues/new';
+          return base + '?title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(body);
+        }
+
+        function openIssue() {
+          if (!validateForm()) return;
+          var d = getData();
+          var title = '[Bug] ' + d.judul;
+          var url = buildIssueUrl(d);
+
+          if (url.length > MAX_ISSUE_URL_LEN) {
+            var fullMd = buildMarkdownReport(d);
+            var shortUrl = 'https://github.com/' + GITHUB_USER + '/' + GITHUB_REPO + '/issues/new'
+              + '?title=' + encodeURIComponent(title)
+              + '&body=' + encodeURIComponent('(Isi laporan lengkap sudah disalin ke clipboard — silakan tempel di sini.)');
+
+            Oreedo.copy(fullMd).then(function () {
+              Oreedo.toast('Laporan terlalu panjang untuk URL — Markdown lengkap sudah disalin ke clipboard, tempel di GitHub Issue.');
+            });
+            try {
+              window.open(shortUrl, '_blank', 'noopener,noreferrer');
+            } catch (err) {
+              Oreedo.toast('Salinan Markdown siap. Buka GitHub Issue secara manual jika pop-up diblokir.');
+            }
+            return;
           }
-          return false;
+
+          try {
+            window.open(url, '_blank', 'noopener,noreferrer');
+            Oreedo.toast('GitHub Issue dibuka di tab baru.');
+          } catch (err) {
+            Oreedo.toast('Gagal membuka tab baru. Izinkan pop-up atau salin laporan Markdown.');
+          }
         }
-        if (errBox) errBox.classList.add('hidden');
-        return true;
-      }
 
-      /* ---------- Ambil data form ---------- */
-      function getData() {
-        function val(id) {
-          var el = document.getElementById(id);
-          return el ? String(el.value || '').trim() : '';
+        function copyReport() {
+          if (!validateForm()) return;
+          var md = buildMarkdownReport(getData());
+          Oreedo.copy(md).then(function (ok) {
+            Oreedo.toast(ok ? 'Laporan bug (Markdown) disalin ke clipboard.' : 'Gagal menyalin laporan.');
+          });
         }
-        return {
-          judul: val('bug-judul'),
-          halaman: val('bug-halaman'),
-          langkah: val('bug-langkah'),
-          harapan: val('bug-harapan'),
-          kenyataan: val('bug-kenyataan'),
-          browser: val('bug-browser')
-        };
-      }
 
-      function buildBody(d) {
-        var lines = [];
-        lines.push('### Halaman');
-        lines.push(d.halaman || '[tidak diisi]');
-        lines.push('');
-        lines.push('### Langkah mengulang');
-        lines.push(d.langkah);
-        lines.push('');
-        lines.push('### Yang diharapkan');
-        lines.push(d.harapan);
-        lines.push('');
-        lines.push('### Yang terjadi');
-        lines.push(d.kenyataan);
-        lines.push('');
-        lines.push('### Browser & perangkat');
-        lines.push(d.browser || '[tidak diisi]');
-        lines.push('');
-        lines.push('---');
-        lines.push('Dilaporkan lewat Oreedo.');
-        return lines.join('\n');
-      }
+        function openEmail() {
+          if (!validateForm()) return;
+          var d = getData();
+          var subject = '[Bug Oreedo] ' + d.judul;
+          var body = buildBody(d);
+          var url = 'mailto:' + encodeURIComponent(EMAIL)
+            + '?subject=' + encodeURIComponent(subject)
+            + '&body=' + encodeURIComponent(body);
 
-      /* ---------- Aksi GitHub Issue ---------- */
-      function openIssue() {
-        if (!validate()) {
-          Oreedo.toast('Lengkapi dulu isian yang wajib.');
-          return;
+          window.location.href = url;
+          Oreedo.toast('Membuka aplikasi email…');
         }
-        var d = getData();
-        var title = '[Bug] ' + d.judul;
-        var body = buildBody(d);
-        var url = 'https://github.com/' + GITHUB_USER + '/' + GITHUB_REPO + '/issues/new'
-          + '?title=' + encodeURIComponent(title)
-          + '&body=' + encodeURIComponent(body);
 
-        try {
-          window.open(url, '_blank', 'noopener,noreferrer');
-          Oreedo.toast('GitHub Issue dibuka di tab baru.');
-        } catch (err) {
-          Oreedo.toast('Gagal membuka tab baru. Izinkan pop-up dulu.');
-        }
-      }
-
-      /* ---------- Aksi Email ---------- */
-      function openEmail() {
-        if (!validate()) {
-          Oreedo.toast('Lengkapi dulu isian yang wajib.');
-          return;
-        }
-        var d = getData();
-        var subject = '[Bug Oreedo] ' + d.judul;
-        var body = buildBody(d);
-        var url = 'mailto:' + encodeURIComponent(EMAIL)
-          + '?subject=' + encodeURIComponent(subject)
-          + '&body=' + encodeURIComponent(body);
-
-        window.location.href = url;
-        Oreedo.toast('Membuka aplikasi email…');
-      }
-
-      /* ---------- Boot ---------- */
-      function boot() {
         initBrowser();
 
-        var btnIssue = $('#btn-issue');
-        if (btnIssue) btnIssue.addEventListener('click', openIssue);
+        var form = $('#bug-form');
+        if (form) {
+          Oreedo.validation.attach(form);
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            openIssue();
+          });
+        }
+
+        var btnCopy = $('#btn-copy-report');
+        if (btnCopy) btnCopy.addEventListener('click', copyReport);
 
         var btnEmail = $('#btn-email');
         if (btnEmail) btnEmail.addEventListener('click', openEmail);
-
-        $$('.input, .select, .textarea').forEach(function (el) {
-          el.addEventListener('input', function () {
-            var field = el.closest ? el.closest('.field') : null;
-            if (field) field.classList.remove('has-error');
-          });
-        });
       }
 
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', boot);
+        document.addEventListener('DOMContentLoaded', startBugPage);
+      } else if (window.Oreedo) {
+        startBugPage();
       } else {
-        boot();
+        window.addEventListener('load', startBugPage);
       }
     })();
   </script>

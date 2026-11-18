@@ -3,11 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <script>try{var t=localStorage.getItem('oreedo:theme');if(t==='light'||t==='dark'){document.querySelector('meta[name="color-scheme"]').content=t;}}catch(e){}</script>
   <title>Buat Prompt — Oreedo</title>
   <meta name="description" content="Susun prompt AI yang jelas dan siap tempel. Format menyesuaikan Claude, ChatGPT, Gemini, DeepSeek, atau GLM.">
-  <meta name="theme-color" content="#16a34a">
-  <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#16a34a" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c1610" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="Buat Prompt — Oreedo">
+  <meta property="og:description" content="Wizard bertahap 6 langkah untuk menyusun prompt AI yang jelas, lengkap dengan pemeriksaan kualitas.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/img/og-image.png">
 
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -28,19 +37,37 @@
         <span class="brand-name">Oreedo<span class="brand-dot">.</span></span>
       </a>
 
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Buka menu">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
-          <path d="M4 7h16M4 12h16M4 17h16"/>
-        </svg>
-      </button>
+      <div class="header-actions">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Buka menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16"/>
+          </svg>
+        </button>
 
-      <nav class="site-nav" id="site-nav" aria-label="Navigasi utama">
-        <ul>
-          <li><a href="index.html">Beranda</a></li>
-          <li><a href="prompt.html" aria-current="page">Buat Prompt</a></li>
-          <li><a href="prd.html">Buat PRD</a></li>
-        </ul>
-      </nav>
+        <nav class="site-nav" id="site-nav" aria-label="Navigasi utama">
+          <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="prompt.html" aria-current="page">Buat Prompt</a></li>
+            <li><a href="prd.html">Buat PRD</a></li>
+          </ul>
+        </nav>
+
+        <button class="theme-toggle" type="button" id="theme-toggle">
+          <span class="theme-opt theme-opt-dark">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span class="visually-hidden">Ganti ke mode gelap</span>
+          </span>
+          <span class="theme-opt theme-opt-light">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+            <span class="visually-hidden">Ganti ke mode terang</span>
+          </span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -61,236 +88,335 @@
       <div class="container">
 
         <div class="toolbar mb-2">
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-templates">Template</button>
           <button type="button" class="btn btn-ghost btn-sm" id="btn-example">Isi contoh</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-history">Riwayat &amp; Ekspor</button>
           <button type="button" class="btn btn-ghost btn-sm" id="btn-reset">Mulai ulang</button>
+          <span class="toolbar-spacer"></span>
+          <div class="segmented" role="group" aria-label="Bahasa output">
+            <button type="button" class="segmented-btn" data-output-lang="id" aria-pressed="true">ID</button>
+            <button type="button" class="segmented-btn" data-output-lang="en" aria-pressed="false">EN</button>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-preview" aria-pressed="false">Pratinjau live</button>
         </div>
 
-        <div class="wizard" id="prompt-wizard">
+        <div class="wizard-shell" id="wizard-shell">
+          <div class="wizard" id="prompt-wizard">
 
-          <div class="wizard-progress" aria-live="polite">
-            <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-            <div class="progress-meta">
-              <span id="progress-label">Langkah 1 dari 6</span>
-              <span id="progress-step">Jenis tugas</span>
+            <div class="wizard-progress">
+              <progress class="wizard-progress-bar" id="wizard-progress-bar" max="6" value="1" aria-labelledby="progress-label progress-step"></progress>
+              <div class="progress-meta" aria-live="polite">
+                <span id="progress-label">Langkah 1 dari 6</span>
+                <span id="progress-step">Jenis tugas</span>
+              </div>
+              <nav class="wizard-steps" id="wizard-steps" aria-label="Langkah pembuatan prompt"></nav>
             </div>
+
+            <p class="form-note">Bidang bertanda <span class="req" aria-hidden="true">*</span> wajib dilengkapi agar prompt siap pakai.</p>
+
+            <!-- ============ PANEL 1 ============ -->
+            <section class="step-panel is-active" id="panel-1" aria-labelledby="panel-1-title">
+              <h2 class="step-title" id="panel-1-title">Jenis tugas &amp; AI target</h2>
+              <p class="step-desc">Pilih jenis tugas supaya label dan struktur hasil menyesuaikan.</p>
+
+              <div class="form-grid">
+                <fieldset class="field" style="border:0;padding:0;margin:0;min-width:0;">
+                  <legend class="field-label mb-1">Jenis tugas <span class="req" aria-hidden="true">*</span></legend>
+                  <div class="chip-grid">
+                    <label class="chip">
+                      <input type="radio" name="taskType" value="kode" checked>
+                      <span class="chip-face">Kode/Web</span>
+                    </label>
+                    <label class="chip">
+                      <input type="radio" name="taskType" value="tulisan">
+                      <span class="chip-face">Tulisan</span>
+                    </label>
+                    <label class="chip">
+                      <input type="radio" name="taskType" value="riset">
+                      <span class="chip-face">Riset/Analisis</span>
+                    </label>
+                    <label class="chip">
+                      <input type="radio" name="taskType" value="gambar">
+                      <span class="chip-face">Gambar</span>
+                    </label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="field" style="border:0;padding:0;margin:0;min-width:0;">
+                  <legend class="field-label mb-1">AI target <span class="req" aria-hidden="true">*</span></legend>
+                  <div class="chip-grid cols-3">
+                    <label class="chip">
+                      <input type="radio" name="aiTarget" value="claude" checked>
+                      <span class="chip-face" style="flex-direction:column;line-height:1.35;">
+                        <span>Claude</span>
+                        <small style="font-weight:600;font-size:.72rem;opacity:.75;">tag XML</small>
+                      </span>
+                    </label>
+                    <label class="chip">
+                      <input type="radio" name="aiTarget" value="chatgpt">
+                      <span class="chip-face" style="flex-direction:column;line-height:1.35;">
+                        <span>ChatGPT / Gemini</span>
+                        <small style="font-weight:600;font-size:.72rem;opacity:.75;">Markdown</small>
+                      </span>
+                    </label>
+                    <label class="chip">
+                      <input type="radio" name="aiTarget" value="deepseek">
+                      <span class="chip-face" style="flex-direction:column;line-height:1.35;">
+                        <span>DeepSeek / GLM</span>
+                        <small style="font-weight:600;font-size:.72rem;opacity:.75;">pendek &amp; eksplisit</small>
+                      </span>
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+
+              <div class="wizard-nav">
+                <span class="spacer"></span>
+                <button type="button" class="btn btn-primary" data-next>
+                  Lanjut
+                  <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- ============ PANEL 2 ============ -->
+            <section class="step-panel" id="panel-2" aria-labelledby="panel-2-title">
+              <h2 class="step-title" id="panel-2-title">Tujuan &amp; hasil akhir</h2>
+              <p class="step-desc">Satu kalimat tujuan yang jelas lebih baik daripada paragraf panjang.</p>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="field-tujuan">Tujuan <span class="req" aria-hidden="true">*</span></label>
+                  <textarea class="textarea" id="field-tujuan" data-field="tujuan" required placeholder="Tulis tujuan dalam satu kalimat."></textarea>
+                  <p class="hint">Fokus pada hasil yang kamu inginkan, bukan prosesnya.</p>
+                </div>
+
+                <div class="field">
+                  <label for="field-hasil">Hasil akhir <span class="req" aria-hidden="true">*</span></label>
+                  <textarea class="textarea" id="field-hasil" data-field="hasil" required placeholder="Wujud akhir yang bisa dilihat atau dipakai."></textarea>
+                  <p class="hint">Misal: satu file HTML, artikel 800 kata, atau gambar 16:9.</p>
+                </div>
+              </div>
+
+              <div class="wizard-nav">
+                <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
+                <span class="spacer"></span>
+                <button type="button" class="btn btn-primary" data-next>
+                  Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- ============ PANEL 3 ============ -->
+            <section class="step-panel" id="panel-3" aria-labelledby="panel-3-title">
+              <h2 class="step-title" id="panel-3-title">Konteks &amp; bahan</h2>
+              <p class="step-desc">Siapa audiensnya, dan apa yang sudah kamu punya?</p>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="field-konteks">Konteks &amp; audiens</label>
+                  <textarea class="textarea" id="field-konteks" data-field="konteks" placeholder="Siapa yang memakai hasilnya? Di lingkungan apa? Level teknisnya bagaimana?"></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="field-bahan">Bahan yang dimiliki</label>
+                  <textarea class="textarea" id="field-bahan" data-field="bahan" placeholder="Desain, aset, referensi, dokumentasi, catatan, dsb."></textarea>
+                  <p class="hint">Sebutkan apa adanya. Kalau belum ada, tulis "belum ada".</p>
+                </div>
+              </div>
+
+              <div class="wizard-nav">
+                <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
+                <span class="spacer"></span>
+                <button type="button" class="btn btn-primary" data-next>
+                  Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- ============ PANEL 4 ============ -->
+            <section class="step-panel" id="panel-4" aria-labelledby="panel-4-title">
+              <h2 class="step-title" id="panel-4-title">Langkah kerja &amp; batasan</h2>
+              <p class="step-desc">Langkah membantu AI bekerja sistematis. Batasan menjaga hasil tetap di jalur.</p>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="field-langkah">Langkah kerja</label>
+                  <textarea class="textarea" id="field-langkah" data-field="langkah" placeholder="1. ...&#10;2. ...&#10;3. ..."></textarea>
+                  <p class="hint">Opsional. Kalau kosong, AI mengusulkan sendiri.</p>
+                </div>
+
+                <div class="field">
+                  <label for="field-batasan">Batasan <span class="text-muted" style="font-weight:600;">(maks 5, satu per baris)</span></label>
+                  <textarea class="textarea" id="field-batasan" data-field="batasan" placeholder="Contoh:&#10;tanpa framework&#10;mobile-first&#10;tanpa dependencies"></textarea>
+                  <p class="hint" id="batasan-count">0 dari 5 batasan</p>
+                </div>
+              </div>
+
+              <div class="wizard-nav">
+                <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
+                <span class="spacer"></span>
+                <button type="button" class="btn btn-primary" data-next>
+                  Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- ============ PANEL 5 ============ -->
+            <section class="step-panel" id="panel-5" aria-labelledby="panel-5-title">
+              <h2 class="step-title" id="panel-5-title">Format, contoh &amp; kriteria selesai</h2>
+              <p class="step-desc">Bagian inilah yang membedakan prompt biasa dengan prompt yang tajam.</p>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="field-format">Format output <span class="req" aria-hidden="true">*</span></label>
+                  <textarea class="textarea" id="field-format" data-field="format" required placeholder="Contoh: Markdown dengan heading, atau satu file HTML lengkap."></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="field-contoh">Contoh hasil (opsional)</label>
+                  <textarea class="textarea" id="field-contoh" data-field="contoh" placeholder="Tempel contoh yang kamu suka, jika ada."></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="field-kriteria">Kriteria selesai <span class="req" aria-hidden="true">*</span></label>
+                  <textarea class="textarea" id="field-kriteria" data-field="kriteria" required placeholder="Ketika ..., maka ...&#10;Ketika ..., maka ..."></textarea>
+                  <p class="hint">Pola: "Ketika [kondisi], maka [hasil yang diharapkan]."</p>
+                </div>
+              </div>
+
+              <div class="wizard-nav">
+                <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
+                <span class="spacer"></span>
+                <button type="button" class="btn btn-primary" data-next>
+                  Lihat hasil <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- ============ PANEL 6 ============ -->
+            <section class="step-panel" id="panel-6" aria-labelledby="panel-6-title">
+              <h2 class="step-title" id="panel-6-title">Hasil prompt</h2>
+              <p class="step-desc">Periksa pemeriksaan kualitas dulu. Kalau sudah oke, salin, edit manual, atau unduh.</p>
+
+              <div class="notice notice-info mb-2">
+                <span class="notice-icon" aria-hidden="true">📋</span>
+                <p>Bagian yang masih <code>[ISI: …]</code> / <code>[FILL: …]</code> perlu kamu lengkapi, atau biarkan AI bertanya.</p>
+              </div>
+
+              <div class="output mb-2">
+                <div class="output-head">
+                  <p class="output-title">prompt.md</p>
+                  <div class="output-head-actions">
+                    <span class="badge" id="output-format-badge">Claude · tag XML</span>
+                    <span class="badge badge-warn" id="edit-status-badge" hidden>Edit manual</span>
+                    <button type="button" class="btn btn-ghost btn-xs" id="btn-edit-output" aria-pressed="false">Edit langsung</button>
+                    <button type="button" class="btn btn-ghost btn-xs" id="btn-reset-edit" hidden>Reset</button>
+                  </div>
+                </div>
+                <pre id="prompt-output" tabindex="0"></pre>
+                <textarea class="output-editor" id="prompt-editor" aria-label="Editor output prompt" hidden></textarea>
+                <div class="output-meta-bar">
+                  <span id="prompt-stats">0 kata · 0 karakter · ~0 token</span>
+                </div>
+              </div>
+
+              <div class="card mb-2">
+                <h3 style="margin-bottom:.4rem;">Pemeriksa kualitas</h3>
+                <p class="hint" style="margin-bottom:.6rem;">Pemeriksaan lokal. Tidak ada yang dikirim ke server.</p>
+                <ul class="check-list" id="checker-list"></ul>
+              </div>
+
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary" id="btn-copy">Salin</button>
+                <button type="button" class="btn btn-secondary" id="btn-download">Unduh .md</button>
+                <button type="button" class="btn btn-ghost" data-prev>← Kembali</button>
+              </div>
+            </section>
+
           </div>
 
-          <!-- ============ PANEL 1 ============ -->
-          <section class="step-panel is-active" id="panel-1" aria-labelledby="panel-1-title">
-            <h2 class="step-title" id="panel-1-title">Jenis tugas &amp; AI target</h2>
-            <p class="step-desc">Pilih jenis tugas supaya label dan contoh field menyesuaikan.</p>
-
-            <div class="form-grid">
-              <fieldset class="field" style="border:0;padding:0;margin:0;min-width:0;">
-                <legend class="field-label mb-1">Jenis tugas <span class="req" aria-hidden="true">*</span></legend>
-                <div class="chip-grid">
-                  <label class="chip">
-                    <input type="radio" name="taskType" value="kode" checked>
-                    <span class="chip-face">Kode/Web</span>
-                  </label>
-                  <label class="chip">
-                    <input type="radio" name="taskType" value="tulisan">
-                    <span class="chip-face">Tulisan</span>
-                  </label>
-                  <label class="chip">
-                    <input type="radio" name="taskType" value="riset">
-                    <span class="chip-face">Riset/Analisis</span>
-                  </label>
-                  <label class="chip">
-                    <input type="radio" name="taskType" value="gambar">
-                    <span class="chip-face">Gambar</span>
-                  </label>
-                </div>
-              </fieldset>
-
-              <fieldset class="field" style="border:0;padding:0;margin:0;min-width:0;">
-                <legend class="field-label mb-1">AI target <span class="req" aria-hidden="true">*</span></legend>
-                <div class="chip-grid cols-3">
-                  <label class="chip">
-                    <input type="radio" name="aiTarget" value="claude" checked>
-                    <span class="chip-face" style="flex-direction:column;line-height:1.35;">
-                      <span>Claude</span>
-                      <small style="font-weight:600;font-size:.72rem;opacity:.7;">tag XML</small>
-                    </span>
-                  </label>
-                  <label class="chip">
-                    <input type="radio" name="aiTarget" value="chatgpt">
-                    <span class="chip-face" style="flex-direction:column;line-height:1.35;">
-                      <span>ChatGPT / Gemini</span>
-                      <small style="font-weight:600;font-size:.72rem;opacity:.7;">Markdown</small>
-                    </span>
-                  </label>
-                  <label class="chip">
-                    <input type="radio" name="aiTarget" value="deepseek">
-                    <span class="chip-face" style="flex-direction:column;line-height:1.35;">
-                      <span>DeepSeek / GLM</span>
-                      <small style="font-weight:600;font-size:.72rem;opacity:.7;">pendek &amp; eksplisit</small>
-                    </span>
-                  </label>
-                </div>
-              </fieldset>
-            </div>
-
-            <div class="wizard-nav">
-              <span class="spacer"></span>
-              <button type="button" class="btn btn-primary" data-next>
-                Lanjut
-                <span class="btn-arrow" aria-hidden="true">→</span>
-              </button>
-            </div>
-          </section>
-
-          <!-- ============ PANEL 2 ============ -->
-          <section class="step-panel" id="panel-2" aria-labelledby="panel-2-title">
-            <h2 class="step-title" id="panel-2-title">Tujuan &amp; hasil akhir</h2>
-            <p class="step-desc">Satu kalimat tujuan yang jelas lebih baik daripada paragraf panjang.</p>
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="field-tujuan">Tujuan <span class="req" aria-hidden="true">*</span></label>
-                <textarea class="textarea" id="field-tujuan" data-field="tujuan" aria-required="true" placeholder="Tulis tujuan dalam satu kalimat."></textarea>
-                <p class="hint">Fokus pada hasil yang kamu inginkan, bukan prosesnya.</p>
-              </div>
-
-              <div class="field">
-                <label for="field-hasil">Hasil akhir <span class="req" aria-hidden="true">*</span></label>
-                <textarea class="textarea" id="field-hasil" data-field="hasil" aria-required="true" placeholder="Wujud akhir yang bisa dilihat atau dipakai."></textarea>
-                <p class="hint">Misal: satu file HTML, artikel 800 kata, atau gambar 1:1.</p>
-              </div>
-            </div>
-
-            <div class="wizard-nav">
-              <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
-              <span class="spacer"></span>
-              <button type="button" class="btn btn-primary" data-next>
-                Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
-              </button>
-            </div>
-          </section>
-
-          <!-- ============ PANEL 3 ============ -->
-          <section class="step-panel" id="panel-3" aria-labelledby="panel-3-title">
-            <h2 class="step-title" id="panel-3-title">Konteks &amp; bahan</h2>
-            <p class="step-desc">Siapa audiensnya, dan apa yang sudah kamu punya?</p>
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="field-konteks">Konteks &amp; audiens</label>
-                <textarea class="textarea" id="field-konteks" data-field="konteks" placeholder="Siapa yang memakai hasilnya? Di lingkungan apa? Level teknisnya bagaimana?"></textarea>
-              </div>
-
-              <div class="field">
-                <label for="field-bahan">Bahan yang dimiliki</label>
-                <textarea class="textarea" id="field-bahan" data-field="bahan" placeholder="Desain, aset, referensi, dokumentasi, catatan, dsb."></textarea>
-                <p class="hint">Sebutkan apa adanya. Kalau belum ada, tulis "belum ada".</p>
-              </div>
-            </div>
-
-            <div class="wizard-nav">
-              <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
-              <span class="spacer"></span>
-              <button type="button" class="btn btn-primary" data-next>
-                Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
-              </button>
-            </div>
-          </section>
-
-          <!-- ============ PANEL 4 ============ -->
-          <section class="step-panel" id="panel-4" aria-labelledby="panel-4-title">
-            <h2 class="step-title" id="panel-4-title">Langkah kerja &amp; batasan</h2>
-            <p class="step-desc">Langkah membantu AI bekerja sistematis. Batasan menjaga hasil tetap di jalur.</p>
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="field-langkah">Langkah kerja</label>
-                <textarea class="textarea" id="field-langkah" data-field="langkah" placeholder="1. ...&#10;2. ...&#10;3. ..."></textarea>
-                <p class="hint">Opsional. Kalau kosong, AI mengusulkan sendiri.</p>
-              </div>
-
-              <div class="field">
-                <label for="field-batasan">Batasan <span class="text-muted" style="font-weight:600;">(maks 5, satu per baris)</span></label>
-                <textarea class="textarea" id="field-batasan" data-field="batasan" placeholder="Contoh:&#10;tanpa framework&#10;mobile-first&#10;tanpa dependencies"></textarea>
-                <p class="hint" id="batasan-count">0 dari 5 batasan</p>
-              </div>
-            </div>
-
-            <div class="wizard-nav">
-              <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
-              <span class="spacer"></span>
-              <button type="button" class="btn btn-primary" data-next>
-                Lanjut <span class="btn-arrow" aria-hidden="true">→</span>
-              </button>
-            </div>
-          </section>
-
-          <!-- ============ PANEL 5 ============ -->
-          <section class="step-panel" id="panel-5" aria-labelledby="panel-5-title">
-            <h2 class="step-title" id="panel-5-title">Format, contoh &amp; kriteria selesai</h2>
-            <p class="step-desc">Bagian inilah yang membedakan prompt biasa dengan prompt yang tajam.</p>
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="field-format">Format output <span class="req" aria-hidden="true">*</span></label>
-                <textarea class="textarea" id="field-format" data-field="format" aria-required="true" placeholder="Contoh: Markdown dengan heading, atau satu file HTML lengkap."></textarea>
-              </div>
-
-              <div class="field">
-                <label for="field-contoh">Contoh hasil (opsional)</label>
-                <textarea class="textarea" id="field-contoh" data-field="contoh" placeholder="Tempel contoh yang kamu suka, jika ada."></textarea>
-              </div>
-
-              <div class="field">
-                <label for="field-kriteria">Kriteria selesai <span class="req" aria-hidden="true">*</span></label>
-                <textarea class="textarea" id="field-kriteria" data-field="kriteria" aria-required="true" placeholder="Ketika ..., maka ...&#10;Ketika ..., maka ..."></textarea>
-                <p class="hint">Pola: "Ketika [kondisi], maka [hasil yang diharapkan]."</p>
-              </div>
-            </div>
-
-            <div class="wizard-nav">
-              <button type="button" class="btn btn-secondary" data-prev>← Kembali</button>
-              <span class="spacer"></span>
-              <button type="button" class="btn btn-primary" data-next>
-                Lihat hasil <span class="btn-arrow" aria-hidden="true">→</span>
-              </button>
-            </div>
-          </section>
-
-          <!-- ============ PANEL 6 ============ -->
-          <section class="step-panel" id="panel-6" aria-labelledby="panel-6-title">
-            <h2 class="step-title" id="panel-6-title">Hasil prompt</h2>
-            <p class="step-desc">Periksa pemeriksaan kualitas dulu. Kalau sudah oke, salin atau unduh.</p>
-
-            <div class="notice notice-info mb-2">
-              <span class="notice-icon" aria-hidden="true">📋</span>
-              <p>Bagian yang masih <code>[ISI: …]</code> perlu kamu lengkapi, atau biarkan AI bertanya.</p>
-            </div>
-
-            <div class="output mb-2">
+          <!-- Panel Pratinjau Live -->
+          <aside class="live-preview" id="live-preview-pane" aria-label="Pratinjau prompt langsung" hidden>
+            <div class="output">
               <div class="output-head">
-                <p class="output-title">prompt.md</p>
-                <span class="badge" id="output-format-badge">Claude · tag XML</span>
+                <p class="output-title">Pratinjau live</p>
+                <div class="output-head-actions">
+                  <span class="badge badge-warn" id="live-preview-badge">0 isian kosong</span>
+                  <button type="button" class="btn btn-ghost btn-xs" id="btn-preview-copy">Salin</button>
+                </div>
               </div>
-              <pre id="prompt-output" tabindex="0"></pre>
+              <pre id="live-preview-output" tabindex="0"></pre>
+              <div class="output-meta-bar">
+                <span id="live-preview-stats">0 kata · ~0 token</span>
+              </div>
             </div>
-
-            <div class="card mb-2">
-              <h3 style="margin-bottom:.4rem;">Pemeriksa kualitas</h3>
-              <p class="hint" style="margin-bottom:.6rem;">Pemeriksaan lokal. Tidak ada yang dikirim ke server.</p>
-              <ul class="check-list" id="checker-list"></ul>
-            </div>
-
-            <div class="btn-group">
-              <button type="button" class="btn btn-primary" id="btn-copy">Salin</button>
-              <button type="button" class="btn btn-secondary" id="btn-download">Unduh .md</button>
-              <button type="button" class="btn btn-ghost" data-prev>← Kembali</button>
-            </div>
-          </section>
-
+          </aside>
         </div>
+
       </div>
     </section>
 
   </main>
+
+  <!-- Dialog Template -->
+  <dialog class="oreedo-dialog" id="templates-dialog" closedby="any" aria-labelledby="templates-dialog-title">
+    <div class="dialog-inner">
+      <div class="dialog-head">
+        <h2 id="templates-dialog-title">Template Prompt Siap Pakai</h2>
+        <button type="button" class="btn btn-ghost btn-xs" data-dialog-close value="close" aria-label="Tutup dialog template">Tutup</button>
+      </div>
+      <div class="dialog-body">
+        <p class="hint mb-0">Pilih skenario yang paling mendekati pekerjaanmu, lalu sesuaikan isiannya.</p>
+        <div class="btn-group" role="group" aria-label="Filter jenis template">
+          <button type="button" class="btn btn-ghost btn-xs" data-tpl-filter="all" aria-pressed="true">Semua</button>
+          <button type="button" class="btn btn-ghost btn-xs" data-tpl-filter="kode" aria-pressed="false">Kode/Web</button>
+          <button type="button" class="btn btn-ghost btn-xs" data-tpl-filter="tulisan" aria-pressed="false">Tulisan</button>
+          <button type="button" class="btn btn-ghost btn-xs" data-tpl-filter="riset" aria-pressed="false">Riset</button>
+          <button type="button" class="btn btn-ghost btn-xs" data-tpl-filter="gambar" aria-pressed="false">Gambar</button>
+        </div>
+        <ul class="dialog-list" id="templates-list"></ul>
+      </div>
+      <div class="dialog-foot">
+        <button type="button" class="btn btn-secondary btn-sm" data-dialog-close value="cancel" autofocus>Tutup</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Dialog Riwayat & Ekspor -->
+  <dialog class="oreedo-dialog" id="history-dialog" closedby="any" aria-labelledby="history-dialog-title">
+    <div class="dialog-inner">
+      <div class="dialog-head">
+        <h2 id="history-dialog-title">Riwayat Draf, Ekspor &amp; Bagikan</h2>
+        <button type="button" class="btn btn-ghost btn-xs" data-dialog-close value="close" aria-label="Tutup dialog riwayat">Tutup</button>
+      </div>
+      <div class="dialog-body">
+        <div class="field">
+          <label for="history-title-input">Simpan snapshot draf saat ini</label>
+          <div class="btn-group">
+            <input class="input" id="history-title-input" type="text" placeholder="Nama draf (opsional)" style="flex:1 1 200px;">
+            <button type="button" class="btn btn-primary btn-sm" id="btn-save-history">Simpan draf</button>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-share-link">Salin tautan draf (#draft=…)</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-export-json">Ekspor JSON</button>
+          <label class="btn btn-secondary btn-sm">
+            Impor JSON
+            <input type="file" id="input-import-json" accept=".json,application/json" class="visually-hidden">
+          </label>
+        </div>
+
+        <hr style="margin:.4rem 0;">
+        <p class="hint mb-0" id="history-empty">Belum ada snapshot tersimpan. Klik "Simpan draf" untuk menyimpan versi saat ini.</p>
+        <ul class="dialog-list" id="history-list"></ul>
+      </div>
+      <div class="dialog-foot">
+        <button type="button" class="btn btn-secondary btn-sm" data-dialog-close value="cancel" autofocus>Tutup</button>
+      </div>
+    </div>
+  </dialog>
 
   <footer class="site-footer">
     <div class="container footer-inner">
@@ -307,10 +433,12 @@
         <li><a href="lisensi.html">Lisensi</a></li>
         <li><a href="kontak.html">Kontak</a></li>
         <li><a href="bug.html">Laporan Bug</a></li>
+        <li><button type="button" class="btn btn-secondary btn-xs" id="btn-install" hidden>Pasang aplikasi</button></li>
       </ul>
+      <span class="visually-hidden" id="install-status" role="status"></span>
 
       <p class="footer-meta">
-        &copy; <span data-year>2025</span> Oreedo. Dibuat dengan sabar dan sedikit tanah.
+        &copy; <span data-year>2026</span> Oreedo. Dibuat dengan sabar dan sedikit tanah.
       </p>
     </div>
   </footer>
