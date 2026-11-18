@@ -88,3 +88,9 @@ node --test tests/oreedo.test.mjs
 ## 📄 Lisensi
 
 Kode Oreedo dirilis di bawah [MIT License](LICENSE) (`Copyright (c) 2025-2026 jaiz-lana`). Semua hasil prompt dan PRD yang kamu buat sepenuhnya milikmu.
+
+## 💖 Dukung Proyek Ini
+
+Jika **Oreedo** bermanfaat bagi Anda, dukungan Anda melalui **Saweria** akan sangat membantu pengembangan dan pemeliharaan proyek ini:
+
+[![Dukung via Saweria](https://img.shields.io/badge/💖%20Dukung%20via-Saweria-FAAD14?style=for-the-badge)](https://saweria.co/jaizlana)
